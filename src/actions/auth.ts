@@ -29,6 +29,7 @@ export const signUpCredentials = async (prevState: unknown,  formData: FormData)
             }
         })
     } catch (error) {
+        console.error(error);
     return { message: "Failed to create user" }
 }
     redirect("/login");
