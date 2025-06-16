@@ -64,7 +64,6 @@ export async function updateFruit(data: UpdateFruitInput) {
     // Revalidasi path agar halaman terkait di-refresh
     revalidatePath("dashboard/buah")
     revalidatePath("/dashboard")
-    revalidatePath(`dashboard/buah/${id}`)
     return { success: true, data: fruit }
   } catch (error) {
     console.error("Error updating fruit:", error)
@@ -106,7 +105,7 @@ export async function deleteFruit(id: string) {
     }
 
     // Revalidasi path agar halaman terkait di-refresh
-    revalidatePath("/fruits")
+    revalidatePath("/buah")
     revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
@@ -240,41 +239,5 @@ export async function getFruitStats() {
   } catch (error) {
     console.error("Error fetching fruit stats:", error)
     return { error: "Gagal mengambil statistik buah" }
-  }
-}
-
-// Fungsi untuk mendapatkan buah yang paling populer berdasarkan penjualan
-export async function getPopularFruits(limit = 6) {
-  try {
-    const popularFruits = await prisma.orderItem.groupBy({
-      by: ["fruitId"],
-      _sum: {
-        quantity: true,
-      },
-      orderBy: {
-        _sum: {
-          quantity: "desc",
-        },
-      },
-      take: limit,
-    })
-
-    const fruitsWithDetails = await Promise.all(
-      popularFruits.map(async (item) => {
-        const fruit = await prisma.fruit.findUnique({
-          where: { id: item.fruitId },
-        })
-
-        return {
-          ...fruit,
-          totalSold: item._sum.quantity || 0,
-        }
-      }),
-    )
-
-    return { success: true, data: fruitsWithDetails.filter(Boolean) }
-  } catch (error) {
-    console.error("Error fetching popular fruits:", error)
-    return { error: "Gagal mengambil buah populer" }
   }
 }
