@@ -15,15 +15,6 @@ export const updateFruitSchema = z.object({
   image: z.string().url("Invalid image URL").optional(),
 })
 
-export const fruitSearchSchema = z.object({
-  query: z.string().optional(),
-  sortBy: z.enum(["name", "price", "stock", "createdAt"]).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  page: z.number().int().positive().default(1),
-  limit: z.number().int().positive().max(100).default(20),
-  inStock: z.boolean().optional(),
-})
-
 // New schema for image upload
 export const imageUploadSchema = z.object({
   file: z
@@ -38,7 +29,24 @@ export const imageUploadSchema = z.object({
     ),
 })
 
+export const createCustomerSchema = z.object({
+  name: z.string().min(1, "Customer name is required"),
+  email: z.string().email("Invalid email format").optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  userId: z.string(),
+})
+
+export const updateCustomerSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Customer name is required").optional(),
+  email: z.string().email("Invalid email format").optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+})
+
+export type CreateCustomerInput = z.infer<typeof createCustomerSchema>
+export type UpdateCustomerInput = z.infer<typeof updateCustomerSchema>
 export type CreateFruitInput = z.infer<typeof createFruitSchema>
 export type UpdateFruitInput = z.infer<typeof updateFruitSchema>
-export type FruitSearchInput = z.infer<typeof fruitSearchSchema>
 export type ImageUploadInput = z.infer<typeof imageUploadSchema>
