@@ -42,11 +42,6 @@ const navItems: NavItem[] = [
     href: "/dashboard/reports",
     icon: BarChart3,
   },
-  {
-    title: "Pengguna",
-    href: "/dashboard/users",
-    icon: Users,
-  },
 ]
 
 export const DashboardLinks = () => {
