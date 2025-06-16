@@ -75,7 +75,7 @@ export function FruitFilters() {
           </div>
           {query && (
             <p className="text-xs text-gray-500">
-              Searching for: <span className="font-medium">"{query}"</span>
+              Searching for: <span className="font-medium">{query}</span>
             </p>
           )}
         </div>

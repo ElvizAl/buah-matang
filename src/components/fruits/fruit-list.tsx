@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Eye, Edit, Trash2, Package, AlertTriangle } from "lucide-react"
+import { MoreHorizontal, Edit, Trash2, Package, AlertTriangle } from "lucide-react"
 import { deleteFruit } from "@/actions/fruit-actions"
 import { useRouter } from "next/navigation"
 
@@ -55,9 +55,9 @@ export function FruitList({ fruits, pagination }: FruitListProps) {
   }
 
   const getStockStatus = (stock: number) => {
-    if (stock === 0) return { label: "Out of Stock", color: "destructive" }
-    if (stock <= 10) return { label: "Low Stock", color: "secondary" }
-    return { label: "In Stock", color: "default" }
+    if (stock === 0) return { label: "Out of Stock"}
+    if (stock <= 10) return { label: "Low Stock"}
+    return { label: "In Stock" }
   }
 
   if (fruits.length === 0) {
@@ -121,7 +121,7 @@ export function FruitList({ fruits, pagination }: FruitListProps) {
                   </TableCell>
 
                   <TableCell>
-                    <Badge variant={stockStatus.color as any}>{stockStatus.label}</Badge>
+                    <Badge>{stockStatus.label}</Badge>
                   </TableCell>
 
                   <TableCell>
@@ -144,7 +144,13 @@ export function FruitList({ fruits, pagination }: FruitListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                          <Link href={"/dashboard/edit"}>
+                          <Link href={`/dashboard/buah/${fruit.id}`}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Detail
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/buah/${fruit.id}/edit`}>
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                           </Link>
