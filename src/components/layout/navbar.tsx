@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { auth, signOut } from "@/auth"
+import CartButton from "../fruits/cart-button"
 
 
 export default async function Navbar() {
@@ -31,7 +32,7 @@ export default async function Navbar() {
                         <div className="flex-row items-center space-x-4">
                             <div className="flex items-center space-x-4">
                                 <div>
-                                    0
+                                    <CartButton />
                                 </div>
                                 {session ? (
                                     <div className="flex items-center gap-4">

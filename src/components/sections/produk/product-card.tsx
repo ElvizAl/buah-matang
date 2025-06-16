@@ -33,19 +33,12 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
     if (searchQuery.trim() === "") {
       setFilteredFruits(fruits)
     } else {
-      const filtered = fruits.filter((fruit) => fruit.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      const filtered = fruits.filter((fruit) =>
+        fruit.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
       setFilteredFruits(filtered)
     }
   }, [searchQuery, fruits])
-
-  const handleQuantityChange = (fruitId: string, value: number) => {
-    const fruit = fruits.find((f) => f.id === fruitId)
-    if (!fruit) return
-
-    // Ensure quantity is between 1 and stock
-    const quantity = Math.max(1, Math.min(value, fruit.stock))
-    setQuantities((prev) => ({ ...prev, [fruitId]: quantity }))
-  }
 
   const handleAddToCart = (fruit: Fruit) => {
     const quantity = quantities[fruit.id] || 1
@@ -66,12 +59,6 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
     }, 1500)
 
     toast.success("ditambahkan ke keranjang")
-  }
-
-  const getStockStatus = (stock: number) => {
-    if (stock === 0) return { label: "Out of Stock", color: "bg-red-100 text-red-800" }
-    if (stock <= 10) return { label: "Low Stock", color: "bg-yellow-100 text-yellow-800" }
-    return { label: "In Stock", color: "bg-green-100 text-green-800" }
   }
 
   const formatCurrency = (amount: number) => {
@@ -98,7 +85,7 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
           <Search className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
           <h3 className="mt-4 text-lg font-medium">Tidak ada hasil</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Tidak ada buah yang cocok dengan pencarian "{searchQuery}"
+            Tidak ada buah yang cocok dengan pencarian {searchQuery}
           </p>
         </div>
       )}
@@ -106,12 +93,12 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredFruits.map((fruit) => {
-          const stockStatus = getStockStatus(fruit.stock)
-
           return (
             <div
               key={fruit.id}
-              className="bg-background rounded-md overflow-hidden h-[280px] flex flex-col border shadow-sm hover:shadow-md transition-shadow"
+              className={`bg-background rounded-md overflow-hidden h-[280px] flex flex-col border shadow-sm hover:shadow-md transition-shadow ${
+                addedItems[fruit.id] ? "border-green-500" : ""
+              }`}
             >
               <div className="relative flex h-40 w-full items-center justify-center text-center">
                 <Image
@@ -131,7 +118,9 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
                 <div>
                   <h3 className="font-medium text-base line-clamp-1">{fruit.name}</h3>
                   <div className="flex justify-between items-center">
-                    <p className="text-green-600 font-medium text-sm">{formatCurrency(fruit.price)}</p>
+                    <p className="text-green-600 font-medium text-sm">
+                      {formatCurrency(fruit.price)}
+                    </p>
                     <p className="text-xs text-muted-foreground">Stok: {fruit.stock}</p>
                   </div>
                 </div>
