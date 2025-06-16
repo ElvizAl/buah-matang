@@ -40,7 +40,7 @@ export default async function EditCustomerPage({ params }: PageProps) {
         </Button>
         <div>
           <h1 className="text-3xl font-bold">Edit Customer</h1>
-          <p className="text-gray-600">Update {customer.name}'s information</p>
+          <p className="text-gray-600">Update {customer.name}  information</p>
         </div>
       </div>
 

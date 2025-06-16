@@ -22,7 +22,6 @@ export function CreateCustomerForm() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<Omit<CreateCustomerInput, "userId">>({
     resolver: zodResolver(createCustomerSchema.omit({ userId: true })),
   })
@@ -40,7 +39,8 @@ export function CreateCustomerForm() {
       } else {
         setError(result.error || "Failed to create customer")
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error)
       setError("An unexpected error occurred")
     } finally {
       setIsLoading(false)

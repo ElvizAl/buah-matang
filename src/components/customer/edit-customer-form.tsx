@@ -68,7 +68,8 @@ export function EditCustomerForm({ customer }: EditCustomerFormProps) {
       } else {
         setError(result.error || "Failed to update customer")
       }
-    } catch (err) {
+    } catch (errror) {
+      console.log(error)
       setError("An unexpected error occurred")
     } finally {
       setIsLoading(false)

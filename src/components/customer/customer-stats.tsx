@@ -1,6 +1,6 @@
 import { getCustomerAnalytics} from "@/actions/customer-actions"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, UserPlus, TrendingUp, Crown } from "lucide-react"
+import { Users, UserPlus, TrendingUp} from "lucide-react"
 
 export async function CustomerStats() {
   const [analyticsResult] = await Promise.all([
