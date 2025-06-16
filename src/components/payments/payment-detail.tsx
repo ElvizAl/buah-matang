@@ -117,6 +117,7 @@ export function PaymentDetail({ payment }: PaymentDetailProps) {
         toast.error(result.error || "Gagal menyetujui pembayaran")
       }
     } catch (error) {
+      console.log(error)
       toast.error("Terjadi kesalahan")
     } finally {
       setIsUpdating(false)
@@ -134,6 +135,7 @@ export function PaymentDetail({ payment }: PaymentDetailProps) {
         toast.error(result.error || "Gagal menolak pembayaran")
       }
     } catch (error) {
+      console.log(error)
       toast.error("Terjadi kesalahan")
     } finally {
       setIsUpdating(false)
