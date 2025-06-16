@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3, LayoutDashboard, Package, Settings, ShoppingCart, Users, } from "lucide-react"
+import { BarChart3, LayoutDashboard, Package, ShoppingCart, Users, } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"

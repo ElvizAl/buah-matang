@@ -8,7 +8,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname) => {
+      onBeforeGenerateToken: async () => {
         // Add any validation logic here
         return {
           allowedContentTypes: ["image/jpeg", "image/png", "image/gif", "image/webp"],
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           }),
         }
       },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
+      onUploadCompleted: async ({ blob }) => {
         // Optional: Add any post-upload logic here
         console.log("Upload completed:", blob.url)
       },

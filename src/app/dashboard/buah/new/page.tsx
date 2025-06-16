@@ -42,7 +42,8 @@ export default function NewFruitPage() {
       } else {
         setError(result.error ?? "Something went wrong. Please try again.")
       }
-    } catch (err) {
+    } catch (error) {
+        console.log(error)
       setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
