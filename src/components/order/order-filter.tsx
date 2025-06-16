@@ -99,7 +99,7 @@ export function OrderFilters() {
           <div className="p-3 bg-blue-50 border border-blue-100 rounded-md">
             <div className="flex items-center justify-between">
               <span className="text-sm text-blue-700">
-                Searching: <span className="font-medium">"{search}"</span>
+                Searching: <span className="font-medium">{search}</span>
               </span>
               <button onClick={clearSearch} className="text-blue-600 hover:text-blue-800 text-sm">
                 Clear

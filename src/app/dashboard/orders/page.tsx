@@ -65,7 +65,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
               {query && (
                 <div className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-md">
                   <p className="text-sm text-blue-700">
-                    Showing results for: <span className="font-medium">"{query}"</span>
+                    Showing results for: <span className="font-medium">{query}</span>
                   </p>
                 </div>
               )}

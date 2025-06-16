@@ -139,7 +139,7 @@ export function OrderList({ orders, pagination }: OrderListProps) {
       <div className="text-center py-10 border rounded-lg bg-white">
         <Search className="mx-auto h-10 w-10 text-gray-400 mb-3" />
         <h3 className="text-lg font-medium">No orders found</h3>
-        <p className="text-gray-500 mt-1">Try adjusting your search to find what you're looking for.</p>
+        <p className="text-gray-500 mt-1">Try adjusting your search to find what youre looking for.</p>
       </div>
     )
   }

@@ -75,7 +75,8 @@ export default function NewOrderPage() {
       if (fruitsResult.success) {
         setFruits(fruitsResult.data)
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error)
       setError("Failed to load data")
     } finally {
       setIsLoadingData(false)
@@ -116,7 +117,8 @@ export default function NewOrderPage() {
       } else {
         setError(result.error ?? "Something went wrong")
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error)
       setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
