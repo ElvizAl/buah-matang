@@ -1,12 +1,7 @@
 "use server"
 
 import { prisma } from "@/db/prisma"
-import {
-  createFruitSchema,
-  updateFruitSchema,
-  type CreateFruitInput,
-  type UpdateFruitInput,
-} from "@/validasi/validasi"
+import { createFruitSchema, updateFruitSchema, type CreateFruitInput, type UpdateFruitInput } from "@/validasi/validasi"
 import { deleteImage } from "@/actions/image-action"
 import { revalidatePath } from "next/cache"
 
@@ -111,7 +106,6 @@ export async function deleteFruit(id: string) {
     return { error: "Gagal menghapus buah" }
   }
 }
-
 
 // Fungsi untuk mendapatkan semua data buah
 export async function getFruits() {
@@ -237,5 +231,66 @@ export async function getFruitStats() {
   } catch (error) {
     console.error("Error fetching fruit stats:", error)
     return { error: "Gagal mengambil statistik buah" }
+  }
+}
+
+// Fungsi untuk mencari buah dengan pagination
+export async function searchFruits(params: {
+  query?: string
+  page?: number
+  limit?: number
+}) {
+  try {
+    const { query, page = 1, limit = 10 } = params
+    const skip = (page - 1) * limit
+
+    // Build where condition - hanya mencari berdasarkan nama buah
+    const where = query
+      ? {
+          name: {
+            contains: query,
+            mode: "insensitive" as const,
+          },
+        }
+      : {}
+
+    // Get fruits with pagination
+    const [fruits, total] = await Promise.all([
+      prisma.fruit.findMany({
+        where,
+        include: {
+          _count: {
+            select: {
+              orderItems: true,
+              stockHistory: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.fruit.count({ where }),
+    ])
+
+    const totalPages = Math.ceil(total / limit)
+
+    return {
+      success: true,
+      data: {
+        fruits,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+        },
+      },
+    }
+  } catch (error) {
+    console.error("Error searching fruits:", error)
+    return { error: "Gagal mencari buah" }
   }
 }
