@@ -294,3 +294,31 @@ export async function searchFruits(params: {
     return { error: "Gagal mencari buah" }
   }
 }
+
+// Fungsi untuk mendapatkan 4 buah featured untuk halaman depan
+export async function getFeaturedFruits() {
+  try {
+    const fruits = await prisma.fruit.findMany({
+      where: {
+        stock: {
+          gt: 0, // Hanya buah yang masih ada stoknya
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            orderItems: true,
+            stockHistory: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" }, // Buah terbaru
+      take: 4, // Hanya ambil 4 buah
+    })
+
+    return { success: true, data: fruits }
+  } catch (error) {
+    console.error("Error fetching featured fruits:", error)
+    return { error: "Gagal mengambil buah unggulan" }
+  }
+}
