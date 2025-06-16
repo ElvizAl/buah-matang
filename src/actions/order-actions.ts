@@ -1,5 +1,6 @@
 "use server"
 
+import { auth } from "@/auth"
 import { prisma } from "@/db/prisma"
 import { createOrderSchema, updateOrderSchema, type CreateOrderInput, type UpdateOrderInput } from "@/validasi/validasi"
 import { revalidatePath } from "next/cache"
@@ -171,7 +172,100 @@ export async function cancelOrder(id: string) {
   }
 }
 
+export async function getOrders({
+  query = "",
+  page = 1,
+  limit = 10,
+}: {
+  query?: string
+  page?: number
+  limit?: number
+}) {
+  try {
+    const session = await auth()
+    if (!session) {
+      return { error: "User not authenticated" }
+    }
 
+    const skip = (page - 1) * limit
+
+    // Build where clause for search
+    const where = query
+      ? {
+          customer: {
+            name: {
+              contains: query,
+              mode: "insensitive" as const,
+            },
+          },
+        }
+      : {}
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        include: {
+          customer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          orderItems: {
+            include: {
+              fruit: {
+                select: {
+                  name: true,
+                  image: true,
+                },
+              },
+            },
+          },
+          payments: true,
+          _count: {
+            select: {
+              orderItems: true,
+              payments: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip,
+        take: limit,
+      }),
+      prisma.order.count({ where }),
+    ])
+
+    const totalPages = Math.ceil(total / limit)
+    const hasNext = page < totalPages
+    const hasPrev = page > 1
+
+    return {
+      success: true,
+      data: {
+        orders,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNext,
+          hasPrev,
+        },
+      },
+    }
+  } catch (error) {
+    console.error("Error fetching orders:", error)
+    return { error: "Failed to fetch orders" }
+  }
+}
 
 export async function getOrderById(id: string) {
   try {
