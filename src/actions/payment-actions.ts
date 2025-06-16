@@ -131,7 +131,7 @@ export async function approvePayment(paymentId: string) {
   }
 }
 
-export async function rejectPayment(paymentId: string, reason?: string) {
+export async function rejectPayment(paymentId: string,) {
   try {
     const payment = await prisma.payment.update({
       where: { id: paymentId },
