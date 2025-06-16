@@ -63,6 +63,7 @@ export function AddToCartButton({ fruit, disabled = false }: AddToCartButtonProp
 
       toast.success(`${fruit.name} ditambahkan ke keranjang`)
     } catch (error) {
+        console.log(error)
       toast.error("Gagal menambahkan ke keranjang")
     } finally {
       setIsLoading(false)

@@ -61,6 +61,13 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
     toast.success("ditambahkan ke keranjang")
   }
 
+  const handleQuantityChange = (fruit: Fruit, value: number) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [fruit.id]: Math.max(1, Math.min(value, fruit.stock)), // Prevent going below 1 and above stock
+    }))
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -124,6 +131,21 @@ export default function ProductCardWithClient({ fruits }: ShopFruitListProps) {
                     <p className="text-xs text-muted-foreground">Stok: {fruit.stock}</p>
                   </div>
                 </div>
+
+                {/* Quantity Input */}
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="number"
+                    min={1}
+                    max={fruit.stock}
+                    value={quantities[fruit.id] || 1}
+                    onChange={(e) =>
+                      handleQuantityChange(fruit, parseInt(e.target.value, 10))
+                    }
+                    className="w-14 p-2 text-center border rounded-md"
+                  />
+                </div>
+
                 <Button
                   className="w-full mt-2"
                   size="sm"
