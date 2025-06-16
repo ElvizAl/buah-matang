@@ -20,9 +20,6 @@ export default function HeroSection() {
                 Belanja Sekarang
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button variant="outline" size="lg">
-                Lihat Katalog
-              </Button>
             </div>
           </div>
           <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden">

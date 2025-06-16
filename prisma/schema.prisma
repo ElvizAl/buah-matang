@@ -24,6 +24,9 @@ model User {
   role          String    @default("user")
   accounts      Account[]
   sessions      Session[]
+  orders       Order[]        // Relasi dengan pesanan yang dibuat oleh pengguna
+  customers    Customer[]     // Relasi dengan pelanggan yang dikelola oleh pengguna
+  stockEntries StockHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,4 +61,121 @@ model Session {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Fruit {
+  id           String         @id @default(cuid())  // ID buah
+  name         String          // Nama buah
+  price        Int             // Harga per buah
+  stock        Int             // Stok buah yang tersedia
+  image        String?         // Gambar buah (opsional)
+  createdAt    DateTime       @default(now())       // Tanggal pembuatan data buah
+  updatedAt    DateTime       @updatedAt            // Tanggal pembaruan data buah
+  orderItems   OrderItem[]    // Relasi dengan item pesanan yang melibatkan buah ini
+  stockHistory StockHistory[] // Relasi dengan perubahan stok buah
+}
+
+model Customer {
+  id        String   @id @default(cuid())  // ID pelanggan
+  name      String   // Nama pelanggan
+  email     String?  @unique               // Email (opsional, dan harus unik)
+  phone     String?  // Nomor telepon (opsional)
+  address   String?  // Alamat (opsional)
+  createdAt DateTime @default(now())       // Tanggal pembuatan data pelanggan
+  updatedAt DateTime @updatedAt            // Tanggal pembaruan data pelanggan
+  orders    Order[]  // Relasi dengan pesanan yang dibuat oleh pelanggan
+  userId    String   // ID pengguna yang mengelola pelanggan ini
+  user      User?    @relation(fields: [userId], references: [id])  // Relasi ke pengguna yang mengelola
+}
+
+model Order {
+  id          String      @id @default(cuid())  // ID pesanan
+  orderNumber String      @unique               // Nomor pesanan yang unik
+  customerId  String      // ID pelanggan yang membuat pesanan
+  customer    Customer    @relation(fields: [customerId], references: [id])  // Relasi ke model Customer
+  status      OrderStatus @default(PROCESSING)  // Status pesanan: processing, completed, cancelled
+  total       Float       // Total harga pesanan
+  payment     PaymentType // Jenis metode pembayaran (cash, transfer, etc.)
+  createdAt   DateTime    @default(now())       // Tanggal pembuatan pesanan
+  updatedAt   DateTime    @updatedAt            // Tanggal pembaruan pesanan
+  orderItems  OrderItem[] // Daftar item yang ada dalam pesanan
+  payments    Payment[]   // Relasi dengan pembayaran yang terkait dengan pesanan ini
+  userId      String?     // ID pengguna yang membuat pesanan ini
+  user        User?       @relation(fields: [userId], references: [id])  // Relasi ke pengguna yang membuat pesanan
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())  // ID item pesanan
+  orderId   String   // ID pesanan yang terkait dengan item ini
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)  // Relasi ke model Order
+  fruitId   String   // ID buah yang dipesan
+  fruit     Fruit    @relation(fields: [fruitId], references: [id])  // Relasi ke model Fruit
+  quantity  Int      // Jumlah buah yang dipesan
+  price     Float    // Harga per buah pada saat pesanan
+  subtotal  Float    // Subtotal harga (quantity * price)
+  createdAt DateTime @default(now())  // Tanggal pembuatan item pesanan
+  updatedAt DateTime @updatedAt       // Tanggal pembaruan item pesanan
+
+  @@index([orderId])  // Index untuk pencarian berdasarkan orderId
+  @@index([fruitId])  // Index untuk pencarian berdasarkan fruitId
+}
+
+enum OrderStatus {
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentType {
+  CASH
+  TRANSFER
+  CREDIT_CARD
+  DIGITAL_WALLET
+}
+
+model StockHistory {
+  id          String   @id @default(cuid())  // ID perubahan stok
+  fruitId     String   // ID buah yang mengalami perubahan stok
+  fruit       Fruit    @relation(fields: [fruitId], references: [id])  // Relasi ke model Fruit
+  quantity    Int      // Jumlah perubahan stok (positif untuk masuk, negatif untuk keluar)
+  movementType String  // Tipe pergerakan stok: "in" (masuk) atau "out" (keluar)
+  description String?  // Deskripsi tentang perubahan stok (opsional)
+  supplierId  String?  // ID pemasok (jika relevan)
+  createdAt   DateTime @default(now())  // Tanggal perubahan stok
+  userId      String?  // ID pengguna yang membuat perubahan stok
+  user        User?    @relation(fields: [userId], references: [id])  // Relasi ke pengguna yang melakukan perubahan
+
+  @@index([fruitId])  // Index untuk pencarian berdasarkan fruitId
+  @@index([userId])   // Index untuk pencarian berdasarkan userId
+}
+
+model Payment {
+  id           String        @id @default(cuid())  // ID pembayaran
+  orderId      String        // ID pesanan yang terkait dengan pembayaran
+  order        Order         @relation(fields: [orderId], references: [id])  // Relasi ke model Order
+  amountPaid   Float         // Jumlah yang dibayar
+  paymentDate  DateTime      @default(now())  // Tanggal pembayaran
+  paymentStatus PaymentStatus @default(PENDING) // Status pembayaran: pending, completed, failed
+  paymentMethod PaymentType  @default(CASH)    // Metode pembayaran
+  proofUrl String?
+  createdAt    DateTime      @default(now())   // Tanggal pembuatan record
+  updatedAt    DateTime      @updatedAt        // Tanggal update record
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Analytics {
+  id            String   @id @default(cuid())  // ID analitik
+  date          DateTime @unique  // Tanggal analitik
+  totalSales    Float    // Total penjualan pada tanggal tersebut
+  orderCount    Int      // Jumlah pesanan pada tanggal tersebut
+  customerCount Int      // Jumlah pelanggan baru pada tanggal tersebut
+  topSellingId  String?  // ID produk terlaris
+  topPaymentMethod PaymentType?  // Metode pembayaran terpopuler
+  createdAt     DateTime @default(now())  // Tanggal pembuatan data analitik
+  updatedAt     DateTime @updatedAt  // Tanggal pembaruan data analitik
 }
