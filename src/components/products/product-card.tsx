@@ -2,11 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ShoppingCart, Eye } from "lucide-react"
+import { ShoppingCart} from "lucide-react"
 import { useCart } from "@/context/cart-provider"
 import { toast } from "sonner"
 
@@ -55,6 +54,7 @@ export function ProductCard({ fruit }: ProductCardProps) {
       })
       toast.success(`${fruit.name} ditambahkan ke keranjang`)
     } catch (error) {
+      console.log(error)
       toast.error("Gagal menambahkan ke keranjang")
     } finally {
       setIsLoading(false)
