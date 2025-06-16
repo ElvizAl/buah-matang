@@ -44,7 +44,7 @@ export default function CartPage() {
           <CardContent>
             <ShoppingCart className="h-16 w-16 mx-auto mb-4 text-gray-400" />
             <h2 className="text-2xl font-bold mb-2">Keranjangmu Kosong</h2>
-            <p className="text-gray-500 mb-6">Looks like you haven't added any fruits to your cart yet.</p>
+            <p className="text-gray-500 mb-6">Looks like you havent added any fruits to your cart yet.</p>
             <Button asChild>
               <Link href="/produk">Browse Fruits</Link>
             </Button>
