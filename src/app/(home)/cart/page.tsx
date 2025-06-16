@@ -152,7 +152,7 @@ export default function CartPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleCheckout} className="w-full">
+              <Button onClick={handleCheckout} className="w-full cursor-pointer">
                 Proses ke Checkout
               </Button>
             </CardFooter>
