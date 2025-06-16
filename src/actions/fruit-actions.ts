@@ -4,10 +4,8 @@ import { prisma } from "@/db/prisma"
 import {
   createFruitSchema,
   updateFruitSchema,
-  fruitSearchSchema,
   type CreateFruitInput,
   type UpdateFruitInput,
-  type FruitSearchInput,
 } from "@/validasi/validasi"
 import { deleteImage } from "@/actions/image-action"
 import { revalidatePath } from "next/cache"
