@@ -44,7 +44,7 @@ export default async function Navbar() {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>Hallo {session.user?.name}</DropdownMenuLabel>
+                                                <DropdownMenuLabel>Hallo {session.user?.role}</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem>
                                                     <Link href="/profile">
