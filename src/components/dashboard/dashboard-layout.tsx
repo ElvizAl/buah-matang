@@ -4,6 +4,7 @@ import { Package} from "lucide-react"
 import UserDropdown from "@/components/dashboard/user-dropdown"
 import { Menus } from "@/components/dashboard/menu"
 import { DashboardLinks } from "@/components/dashboard/dashboard-links"
+import NotificationBell from "./notification-bell"
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </Link>
         <div className="flex-1"></div>
         <div className="flex items-center gap-2">
+          <NotificationBell />
           <UserDropdown />
         </div>
       </header>
